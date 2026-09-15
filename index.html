@@ -55,10 +55,14 @@ button{border:0;border-radius:11px;padding:13px 18px;font-weight:800;cursor:poin
 .fuel-sale{display:flex;flex-direction:column;gap:6px}
 .fuel-sale label{font-weight:700}
 .fuel-sale input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--text);font:inherit;outline:none}
-.fuel-91 label{color:#159447}
-.fuel-95 label{color:#d62828}
-.fuel-98 label{color:#1677d2}
-.fuel-diesel label{color:#d4a000}
+.fuel-91 label,.fuel-95 label,.fuel-98 label,.fuel-diesel label{color:var(--text)}
+
+/* ألوان أرقام أنواع الوقود فقط — حقول الإدخال تبقى عادية */
+.fuel-91 label{color:#2e9d50}
+.fuel-95 label{color:#d63b3b}
+.fuel-98 label{color:#2f78d4}
+.fuel-diesel label{color:#d4a900}
+
 </style>
 </head>
 <body>
@@ -273,6 +277,7 @@ setDateTime();
 </script>
 </body>
 </html>
+
 
 
 
