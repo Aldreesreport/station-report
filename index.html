@@ -38,10 +38,13 @@ button{border:0;border-radius:11px;padding:13px 18px;font-weight:800;cursor:poin
 @media(max-width:650px){.grid{grid-template-columns:1fr}.hero{min-height:235px;background-position:center}.hero h1{margin-top:60px;font-size:25px}.card{padding:14px}.brand{font-size:18px}}
 
 .sales-fuels{display:grid;grid-template-columns:1fr;gap:10px;margin:12px 0 4px}
-.fuel-sale{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px;border-top:5px solid}
-.fuel-sale label{display:block;font-weight:700;margin-bottom:7px}
+.fuel-sale{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px}
+.fuel-sale label{display:block;font-weight:700;margin-bottom:7px;color:var(--text)}
 .fuel-sale input{width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;font:inherit;color:var(--text);background:#fff}
-.fuel-91{border-top-color:#2e9d50}.fuel-95{border-top-color:#d63b3b}.fuel-diesel{border-top-color:#e0b51f}.fuel-98{border-top-color:#2f78d4}
+.fuel-num-91{color:#2e9d50}
+.fuel-num-95{color:#d63b3b}
+.fuel-num-diesel{color:#d4a900}
+.fuel-num-98{color:#2f78d4}
 @media(max-width:700px){.sales-fuels{grid-template-columns:1fr}}
 @media print{
 .sales-fuels{grid-template-columns:1fr!important;gap:5px!important;margin:6px 0!important}
@@ -240,20 +243,20 @@ groups.forEach((g,gi)=>{
   const d=document.createElement("div");d.className="item";
   const name="q"+gi+"_"+ii;
   d.innerHTML=`<div class="item-name">${it[0]}</div>
-  <div class="options">
+  ${it[0] === "متابعة مبيعات المحطة" ? "" : `<div class="options">
    <label class="opt"><input type="radio" name="${name}" value="${it[1]}"><span>${it[1]}</span></label>
    <label class="opt"><input type="radio" name="${name}" value="${it[2]}"><span>${it[2]}</span></label>
-  </div>
-  <textarea class="note" placeholder="الملاحظة / الإجراء المتبع — اكتب بالتفصيل هنا..."></textarea>`;
+  </div>`}
+  ${it[0] === "متابعة مبيعات المحطة" ? "" : '<textarea class="note" placeholder="الملاحظة / الإجراء المتبع — اكتب بالتفصيل هنا..."></textarea>'}`;
   root.appendChild(d);
   if(it[0] === "متابعة مبيعات المحطة") {
    const sales=document.createElement("div");
    sales.className="sales-fuels";
    sales.innerHTML=`
-    <div class="fuel-sale fuel-91"><label for="sales91">مبيعات 91 (لتر)</label><input id="sales91" type="number" inputmode="decimal" step="any" min="0" autocomplete="off"></div>
-    <div class="fuel-sale fuel-95"><label for="sales95">مبيعات 95 (لتر)</label><input id="sales95" type="number" inputmode="decimal" step="any" min="0" autocomplete="off"></div>
-    <div class="fuel-sale fuel-diesel"><label for="salesDiesel">مبيعات الديزل (إن وجد) (لتر)</label><input id="salesDiesel" type="number" inputmode="decimal" step="any" min="0" autocomplete="off"></div>
-    <div class="fuel-sale fuel-98"><label for="sales98">مبيعات 98 (إن وجد) (لتر)</label><input id="sales98" type="number" inputmode="decimal" step="any" min="0" autocomplete="off"></div>`;
+    <div class="fuel-sale"><label for="sales91">مبيعات <span class="fuel-num-91">91</span> (L)</label><input id="sales91" type="number" inputmode="decimal" step="any" min="0" autocomplete="off"></div>
+    <div class="fuel-sale"><label for="sales95">مبيعات <span class="fuel-num-95">95</span> (L)</label><input id="sales95" type="number" inputmode="decimal" step="any" min="0" autocomplete="off"></div>
+    <div class="fuel-sale"><label for="salesDiesel">مبيعات <span class="fuel-num-diesel">الديزل</span> (L)</label><input id="salesDiesel" type="number" inputmode="decimal" step="any" min="0" autocomplete="off"></div>
+    <div class="fuel-sale"><label for="sales98">مبيعات <span class="fuel-num-98">98</span> (L)</label><input id="sales98" type="number" inputmode="decimal" step="any" min="0" autocomplete="off"></div>`;
    root.appendChild(sales);
   }
  });
