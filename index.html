@@ -250,10 +250,10 @@ groups.forEach((g,gi)=>{
    const sales=document.createElement("div");
    sales.className="sales-fuels";
    sales.innerHTML=`
-    <div class="fuel-sale fuel-91"><label for="sales91">مبيعات 91</label><input id="sales91" type="text" inputmode="decimal" autocomplete="off"></div>
-    <div class="fuel-sale fuel-95"><label for="sales95">مبيعات 95</label><input id="sales95" type="text" inputmode="decimal" autocomplete="off"></div>
-    <div class="fuel-sale fuel-diesel"><label for="salesDiesel">مبيعات الديزل (إن وجد)</label><input id="salesDiesel" type="text" inputmode="decimal" autocomplete="off"></div>
-    <div class="fuel-sale fuel-98"><label for="sales98">مبيعات 98 (إن وجد)</label><input id="sales98" type="text" inputmode="decimal" autocomplete="off"></div>`;
+    <div class="fuel-sale fuel-91"><label for="sales91">مبيعات 91 (لتر)</label><input id="sales91" type="number" inputmode="decimal" step="any" min="0" autocomplete="off"></div>
+    <div class="fuel-sale fuel-95"><label for="sales95">مبيعات 95 (لتر)</label><input id="sales95" type="number" inputmode="decimal" step="any" min="0" autocomplete="off"></div>
+    <div class="fuel-sale fuel-diesel"><label for="salesDiesel">مبيعات الديزل (إن وجد) (لتر)</label><input id="salesDiesel" type="number" inputmode="decimal" step="any" min="0" autocomplete="off"></div>
+    <div class="fuel-sale fuel-98"><label for="sales98">مبيعات 98 (إن وجد) (لتر)</label><input id="sales98" type="number" inputmode="decimal" step="any" min="0" autocomplete="off"></div>`;
    root.appendChild(sales);
   }
  });
@@ -279,9 +279,3 @@ setDateTime();
 </script>
 </body>
 </html>
-
-
-
-
-
-
