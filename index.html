@@ -36,7 +36,18 @@ input:focus,textarea:focus{outline:2px solid #b8e6f6;border-color:var(--blue)}
 button{border:0;border-radius:11px;padding:13px 18px;font-weight:800;cursor:pointer}
 .primary{background:linear-gradient(90deg,var(--blue),var(--blue2));color:#fff}.secondary{background:#fff;color:var(--blue);border:1px solid var(--blue)}
 @media(max-width:650px){.grid{grid-template-columns:1fr}.hero{min-height:235px;background-position:center}.hero h1{margin-top:60px;font-size:25px}.card{padding:14px}.brand{font-size:18px}}
+
+.sales-fuels{display:grid;grid-template-columns:1fr;gap:10px;margin:12px 0 4px}
+.fuel-sale{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px;border-top:5px solid}
+.fuel-sale label{display:block;font-weight:700;margin-bottom:7px}
+.fuel-sale input{width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;font:inherit;color:var(--text);background:#fff}
+.fuel-91{border-top-color:#2e9d50}.fuel-95{border-top-color:#d63b3b}.fuel-diesel{border-top-color:#e0b51f}.fuel-98{border-top-color:#2f78d4}
+@media(max-width:700px){.sales-fuels{grid-template-columns:1fr}}
 @media print{
+.sales-fuels{grid-template-columns:1fr!important;gap:5px!important;margin:6px 0!important}
+.fuel-sale{break-inside:avoid!important;padding:6px!important;border-radius:7px!important}
+.fuel-sale input{padding:5px!important;border:1px solid #9fb7c6!important;background:#fff!important}
+
  .brand img{width:85px!important;max-height:42px!important}
  body{background:#fff;font-size:9px}.hero{min-height:90px;padding:8px 14px 12px;background-image:none!important;background:#fff!important;color:#173f5f;border-bottom:3px solid #0d87c8}
  .brand{box-shadow:none;padding:2px 6px;font-size:14px}.hero h1{font-size:16px;margin:5px 0}.hero p{color:#555;font-size:8px}
@@ -49,20 +60,6 @@ button{border:0;border-radius:11px;padding:13px 18px;font-weight:800;cursor:poin
  main,.wrap,.card,#sections{height:auto!important;max-height:none!important;overflow:visible!important}
  .actions{display:none!important}
 }
-
-/* حقول مبيعات المحطة - الألوان على أسماء الوقود فقط */
-.sales-fuels{display:flex;flex-direction:column;gap:10px;margin-top:10px}
-.fuel-sale{display:flex;flex-direction:column;gap:6px}
-.fuel-sale label{font-weight:700}
-.fuel-sale input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--text);font:inherit;outline:none}
-.fuel-91 label,.fuel-95 label,.fuel-98 label,.fuel-diesel label{color:var(--text)}
-
-/* ألوان أرقام أنواع الوقود فقط — حقول الإدخال تبقى عادية */
-.fuel-91 label{color:#2e9d50}
-.fuel-95 label{color:#d63b3b}
-.fuel-98 label{color:#2f78d4}
-.fuel-diesel label{color:#d4a900}
-
 </style>
 </head>
 <body>
@@ -219,6 +216,7 @@ const groups = [
 ["التأكد من رفع الحاويات (نباتات)","تم","لم يتم"],
 ["التأكد من سلامة ونظافة غرفة عدادات الكهرباء","تم","لم يتم"],
 ["التأكد من وجود وسلامة السجل البيئي","تم","لم يتم"],
+["التأكد من استيكرات الأصول وسلامتها ووجود الدفتر وسلامته","تم","لم يتم"]
 ]],
 
 ["التراخيص والمتابعة",[
@@ -241,19 +239,23 @@ groups.forEach((g,gi)=>{
  g[1].forEach((it,ii)=>{
   const d=document.createElement("div");d.className="item";
   const name="q"+gi+"_"+ii;
-  const isSales = it[0] === "متابعة مبيعات المحطة";
   d.innerHTML=`<div class="item-name">${it[0]}</div>
   <div class="options">
    <label class="opt"><input type="radio" name="${name}" value="${it[1]}"><span>${it[1]}</span></label>
    <label class="opt"><input type="radio" name="${name}" value="${it[2]}"><span>${it[2]}</span></label>
   </div>
-  ${isSales ? `<div class="sales-fuels">
-   <div class="fuel-sale fuel-91"><label for="sales91">مبيعات 91</label><input id="sales91" type="text" inputmode="decimal" autocomplete="off"></div>
-   <div class="fuel-sale fuel-95"><label for="sales95">مبيعات 95</label><input id="sales95" type="text" inputmode="decimal" autocomplete="off"></div>
-   <div class="fuel-sale fuel-98"><label for="sales98">مبيعات 98</label><input id="sales98" type="text" inputmode="decimal" autocomplete="off"></div>
-   <div class="fuel-sale fuel-diesel"><label for="salesDiesel">مبيعات الديزل</label><input id="salesDiesel" type="text" inputmode="decimal" autocomplete="off"></div>
-  </div>` : `<textarea class="note" placeholder="الملاحظة / الإجراء المتبع — اكتب بالتفصيل هنا..."></textarea>`}`;
+  <textarea class="note" placeholder="الملاحظة / الإجراء المتبع — اكتب بالتفصيل هنا..."></textarea>`;
   root.appendChild(d);
+  if(it[0] === "متابعة مبيعات المحطة") {
+   const sales=document.createElement("div");
+   sales.className="sales-fuels";
+   sales.innerHTML=`
+    <div class="fuel-sale fuel-91"><label for="sales91">مبيعات 91</label><input id="sales91" type="text" inputmode="decimal" autocomplete="off"></div>
+    <div class="fuel-sale fuel-95"><label for="sales95">مبيعات 95</label><input id="sales95" type="text" inputmode="decimal" autocomplete="off"></div>
+    <div class="fuel-sale fuel-diesel"><label for="salesDiesel">مبيعات الديزل (إن وجد)</label><input id="salesDiesel" type="text" inputmode="decimal" autocomplete="off"></div>
+    <div class="fuel-sale fuel-98"><label for="sales98">مبيعات 98 (إن وجد)</label><input id="sales98" type="text" inputmode="decimal" autocomplete="off"></div>`;
+   root.appendChild(sales);
+  }
  });
 });
 function setDateTime() {
