@@ -45,6 +45,9 @@ button{border:0;border-radius:11px;padding:13px 18px;font-weight:800;cursor:poin
  .options{margin-top:3px}.opt span{padding:2px 6px;font-size:8px;background:#fff!important;color:#667!important;border:1px solid #c8d5dc!important;box-shadow:none!important}.opt input:checked+span{background:#fff!important;color:#000!important;border:2px solid #000!important;font-weight:900!important}.opt input:checked+span::before{content:"✓";font-weight:900;margin-left:4px}.note{min-height:30px;padding:4px;font-size:8px}
  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
  input{padding:4px;font-size:8px}
+ html,body{height:auto!important;min-height:0!important;overflow:visible!important}
+ main,.wrap,.card,#sections{height:auto!important;max-height:none!important;overflow:visible!important}
+ .actions{display:none!important}
 }
 </style>
 </head>
@@ -70,9 +73,69 @@ button{border:0;border-radius:11px;padding:13px 18px;font-weight:800;cursor:poin
 </div>
 </main>
 <div class="actions wrap">
- <button class="primary" onclick="window.print()">حفظ / طباعة PDF</button>
+ <button class="primary" id="printBtn" type="button" onclick="safePrint()">حفظ / طباعة PDF</button>
 </div>
 <script>
+let printInProgress = false;
+
+async function safePrint() {
+  if (printInProgress) return;
+  printInProgress = true;
+
+  const btn = document.getElementById("printBtn");
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "جاري تجهيز PDF...";
+  }
+
+  try {
+    // انتظر الخطوط إن كان المتصفح يدعم ذلك
+    if (document.fonts && document.fonts.ready) {
+      await document.fonts.ready;
+    }
+
+    // انتظر جميع الصور الموجودة في الصفحة حتى تكتمل
+    const images = Array.from(document.images);
+    await Promise.all(images.map(img => {
+      if (img.complete) return Promise.resolve();
+      return new Promise(resolve => {
+        img.addEventListener("load", resolve, { once: true });
+        img.addEventListener("error", resolve, { once: true });
+      });
+    }));
+
+    // أعطِ المتصفح وقتاً لإكمال رسم الصفحة قبل فتح نافذة الطباعة
+    await new Promise(resolve =>
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() =>
+          setTimeout(resolve, 250)
+        )
+      )
+    );
+
+    window.print();
+  } finally {
+    // بعض متصفحات الجوال تعود من نافذة الطباعة بطريقة مختلفة،
+    // لذلك نعيد الزر بعد مهلة بسيطة كحماية إضافية.
+    setTimeout(() => {
+      printInProgress = false;
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = "حفظ / طباعة PDF";
+      }
+    }, 1000);
+  }
+}
+
+window.addEventListener("afterprint", () => {
+  printInProgress = false;
+  const btn = document.getElementById("printBtn");
+  if (btn) {
+    btn.disabled = false;
+    btn.textContent = "حفظ / طباعة PDF";
+  }
+});
+
 const groups = [
 
 ["المحطة والمظهر العام",[
@@ -195,6 +258,8 @@ setDateTime();
 </script>
 </body>
 </html>
+station-report-pdf-fixed.html
+HTML
 
 
 
